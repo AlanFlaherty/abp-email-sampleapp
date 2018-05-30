@@ -31,7 +31,7 @@ if exist .\dist (
 
 REM call ng build, ng build seems to kill the command process when it exits
 REM give it its own proceess to prevent the bat file getting halted
-cmd /c "cd %cd% && ng build -prod -aot"
+cmd /c "cd %cd% && .\node_modules\.bin\ng.cmd build -prod -aot"
 
 REM remove existing files in deployment directory
 pushd ..\aspnet-core\src\AbpCompanyName.AbpProjectName.Web.Host\wwwroot
