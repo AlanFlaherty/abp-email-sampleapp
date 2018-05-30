@@ -6,7 +6,7 @@ setlocal ENABLEDELAYEDEXPANSION
 
 REM install npm packages
 if not exist .\node_modules (
-	npm i
+	cmd /c "cd %cd% && npm i"
 )
 
 REM Move 'dist' into dist-DD-MM-YYYY-HH-MM
