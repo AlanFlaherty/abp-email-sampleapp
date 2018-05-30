@@ -24,3 +24,20 @@ if exist .\dist (
     echo "No Existing dist folder
 )
 
+REM call ng build, ng build seems to kill the command process when it exits
+REM give it its own proceess to prevent the bat file getting halted
+cmd /c "cd %cd% && ng build -prod -aot"
+
+REM remove existing files in deployment directory
+pushd ..\aspnet-core\src\AbpCompanyName.AbpProjectName.Web.Host\wwwroot
+dir .
+echo %cd%
+
+REM delete existing files
+del *.chunk.js, *.bundle.js, *.bundle.css, *.woff, *.woff2, *.png, *.jpg, favicon.ico, *.ttf, *.svg, *.eot, *.html, 
+rmdir /s /q assets
+
+REM copy the dist files into the deployment folder
+popd
+xcopy .\dist ..\aspnet-core\src\AbpCompanyName.AbpProjectName.Web.Host\wwwroot /i /s /y
+
