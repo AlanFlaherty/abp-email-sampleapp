@@ -4,6 +4,11 @@ REM setlocal and !variable! instead of %variable% to
 REM prevent variable expansion from start
 setlocal ENABLEDELAYEDEXPANSION
 
+REM install npm packages
+if not exist .\node_modules (
+	npm i
+)
+
 REM Move 'dist' into dist-DD-MM-YYYY-HH-MM
 echo Checking if .\dist exists
 
