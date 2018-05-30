@@ -31,4 +31,10 @@
     </None>
   </ItemGroup>
 
+  <!-- Notes: Windows only-->
+  <Target Name="Build Angular" Condition="'$(Configuration)'=='Release'" BeforeTargets="Build">
+    <Message Text="* * * * * * Building Angular App * * * * * *" Importance="high" />
+    <Exec Command="angular-build.bat" />
+  </Target>
+
 </Project>
