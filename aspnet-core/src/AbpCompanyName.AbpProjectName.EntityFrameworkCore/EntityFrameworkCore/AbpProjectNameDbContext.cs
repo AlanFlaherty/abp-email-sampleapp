@@ -15,7 +15,7 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
     public class AbpProjectNameDbContext : AbpZeroDbContext<Tenant, Role, User, AbpProjectNameDbContext>
     {
         /* Define an IDbSet for each entity of the application */
-        public DbSet<EmailSettings> EmailSettings { get; set;}
+//        public DbSet<EmailSettings> EmailSettings { get; set;}
         
         public AbpProjectNameDbContext(DbContextOptions<AbpProjectNameDbContext> options)
             : base(options)
