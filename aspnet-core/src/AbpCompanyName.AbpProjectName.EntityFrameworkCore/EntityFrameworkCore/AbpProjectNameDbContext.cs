@@ -7,7 +7,7 @@ using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
 
 using AbpCompanyName.AbpProjectName.Configuration;
-using AbpCompanyName.AbpProjectName.Email;
+//using AbpCompanyName.AbpProjectName.Email;
 using AbpCompanyName.AbpProjectName.Web;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
@@ -31,7 +31,7 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
             var schema = configuration["Database:Schema"];
             
             // Application tables
-            modelBuilder.Entity<EmailSettings>().ToTable(prefix + "EmailSettings", schema);
+            //modelBuilder.Entity<EmailSettings>().ToTable(prefix + "EmailSettings", schema);
 
             // Abp tables
             modelBuilder.Entity<UserToken>().ToTable(prefix + "UserToken", schema);
