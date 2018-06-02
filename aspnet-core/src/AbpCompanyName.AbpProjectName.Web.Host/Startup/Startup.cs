@@ -100,6 +100,10 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint

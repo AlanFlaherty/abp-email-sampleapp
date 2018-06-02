@@ -5,6 +5,7 @@ using Abp.Timing;
 using AbpCompanyName.AbpProjectName.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Abp.Extensions;
+using Microsoft.Net.Http.Headers;
 
 namespace AbpCompanyName.AbpProjectName.Web.Host.Controllers
 {
@@ -19,7 +20,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Controllers
 
         public IActionResult Index()
         {
-            return Redirect("index.html");
+            return new VirtualFileResult("index.html", "text/html");
         }
 
         /// <summary>
