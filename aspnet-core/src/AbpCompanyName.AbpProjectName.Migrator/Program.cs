@@ -10,6 +10,7 @@ namespace AbpCompanyName.AbpProjectName.Migrator
     public class Program
     {
         private static bool _skipConnVerification = false;
+        private static bool _isAzure = false;
 
         public static void Main(string[] args)
         {
@@ -29,8 +30,10 @@ namespace AbpCompanyName.AbpProjectName.Migrator
                     migrateExecuter.Object.Run(_skipConnVerification);
                 }
 
-                //Console.WriteLine("Press ENTER to exit...");
-                //Console.ReadLine();
+                if (!_isAzure) {
+                    Console.WriteLine("Press ENTER to exit...");
+                    Console.ReadLine();
+                }
             }
         }
 
@@ -48,6 +51,11 @@ namespace AbpCompanyName.AbpProjectName.Migrator
                 {
                     case "-s":
                         _skipConnVerification = true;
+                        break;
+
+                    case "-azure":
+                        _skipConnVerification = true;
+                        _isAzure = true;
                         break;
                 }
             }
