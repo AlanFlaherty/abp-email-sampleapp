@@ -6,9 +6,7 @@ using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
 
-using AbpCompanyName.AbpProjectName.Configuration;
 //using AbpCompanyName.AbpProjectName.Email;
-using AbpCompanyName.AbpProjectName.Web;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
 {
@@ -26,16 +24,12 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
             
-            var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
-            var prefix = configuration["Database:TablePrefix"];
-            var schema = configuration["Database:Schema"];
-            
             // Application tables
-            //modelBuilder.Entity<EmailSettings>().ToTable(prefix + "EmailSettings", schema);
+            //modelBuilder.Entity<EmailSettings>().ToTable(AbpProjectNameConsts.TablePrefix + "EmailSettings", AbpProjectNameConsts.Schema);
 
             // Abp tables
-            modelBuilder.Entity<UserToken>().ToTable(prefix + "UserToken", schema);
-            modelBuilder.ChangeAbpTablePrefix<Tenant, Role, User>(prefix, schema);
+            modelBuilder.Entity<UserToken>().ToTable(AbpProjectNameConsts.TablePrefix + "UserToken", AbpProjectNameConsts.Schema);
+            modelBuilder.ChangeAbpTablePrefix<Tenant, Role, User>(AbpProjectNameConsts.TablePrefix, AbpProjectNameConsts.Schema);
         }
     }
 }
