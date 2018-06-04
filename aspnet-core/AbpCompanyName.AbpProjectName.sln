@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "angular", "angular", "{D807
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpCompanyName.AbpProjectName.AngularUI", "..\angular\AbpCompanyName.AbpProjectName.AngularUI.csproj", "{E4837D25-C3E5-416B-9B4C-673DCA626728}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileContextCore", "..\..\FileContextCore\src\FileContextCore\FileContextCore.csproj", "{9FFCDFFD-3EB1-4782-B16C-D48CE6EDED7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{E4837D25-C3E5-416B-9B4C-673DCA626728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4837D25-C3E5-416B-9B4C-673DCA626728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4837D25-C3E5-416B-9B4C-673DCA626728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FFCDFFD-3EB1-4782-B16C-D48CE6EDED7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FFCDFFD-3EB1-4782-B16C-D48CE6EDED7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FFCDFFD-3EB1-4782-B16C-D48CE6EDED7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FFCDFFD-3EB1-4782-B16C-D48CE6EDED7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,5 +82,6 @@ Global
 		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{E4837D25-C3E5-416B-9B4C-673DCA626728} = {D8072081-0A42-4B2F-B603-52E514B316DF}
+		{9FFCDFFD-3EB1-4782-B16C-D48CE6EDED7F} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 	EndGlobalSection
 EndGlobal

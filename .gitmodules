@@ -1,0 +1,3 @@
+[submodule "aspnet-core/src-lib/FileContextCore"]
+	path = aspnet-core/src-lib/FileContextCore
+	url = https://github.com/AlanFlaherty/FileContextCore.git

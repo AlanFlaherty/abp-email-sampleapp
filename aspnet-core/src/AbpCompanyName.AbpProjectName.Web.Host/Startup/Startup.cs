@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Abp.Extensions;
 
+using FileContextCore.Extensions;
+
 #if FEATURE_SIGNALR
 using Owin;
 using Microsoft.Owin.Cors;

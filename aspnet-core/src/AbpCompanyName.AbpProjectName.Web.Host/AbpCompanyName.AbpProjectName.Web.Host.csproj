@@ -49,13 +49,6 @@
     <PackageReference Include="Abp.Castle.Log4Net" Version="2.1.2" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-
-    <PackageReference Include="Microsoft.Owin.Cors" Version="3.1.0" />
-  </ItemGroup>
-
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
