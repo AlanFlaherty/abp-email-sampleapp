@@ -16,7 +16,7 @@
   </ItemGroup>
    
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\FileContextCore\src\FileContextCore\FileContextCore.csproj" />
+    <ProjectReference Include="..\..\src-lib\FileContextCore\src\FileContextCore\FileContextCore.csproj" />
     <ProjectReference Include="..\AbpCompanyName.AbpProjectName.Core\AbpCompanyName.AbpProjectName.Core.csproj" />
   </ItemGroup>
 
