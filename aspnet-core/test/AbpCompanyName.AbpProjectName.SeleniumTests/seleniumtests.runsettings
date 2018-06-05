@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  
+  
+  <!-- Configurations that affect the Test Framework -->
+  <TestRunParameters>
+    <Parameter name="webAppUrl" value="https://abp-email-develop.azurewebsites.net/" />
+    <Parameter name="webAppUserName" value="admin" />
+    <Parameter name="webAppPassword" value="123qwe" />
+  </TestRunParameters>
+</RunSettings>
