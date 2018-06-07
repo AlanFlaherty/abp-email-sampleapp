@@ -4,7 +4,7 @@
   
   <!-- Configurations that affect the Test Framework -->
   <TestRunParameters>
-    <Parameter name="webAppUrl" value="https://abp-email-develop.azurewebsites.net/" />
+    <Parameter name="webAppUrl" value="https://at-abp-email-develop.azurewebsites.net/" />
     <Parameter name="webAppUserName" value="admin" />
     <Parameter name="webAppPassword" value="123qwe" />
   </TestRunParameters>
