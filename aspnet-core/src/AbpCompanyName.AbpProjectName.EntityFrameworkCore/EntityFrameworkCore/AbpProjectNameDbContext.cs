@@ -1,4 +1,4 @@
-﻿using Abp.Authorization.Users;
+using Abp.Authorization.Users;
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,14 +7,14 @@ using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
 
 //using AbpCompanyName.AbpProjectName.Email;
-
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
 {
     public class AbpProjectNameDbContext : AbpZeroDbContext<Tenant, Role, User, AbpProjectNameDbContext>
     {
         /* Define an IDbSet for each entity of the application */
 //        public DbSet<EmailSettings> EmailSettings { get; set;}
-        
+
+        /* Define a DbSet for each entity of the application */
         public AbpProjectNameDbContext(DbContextOptions<AbpProjectNameDbContext> options)
             : base(options)
         {

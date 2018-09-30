@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Abp;
 using Abp.Authorization.Users;
 using Abp.Events.Bus;
 using Abp.Events.Bus.Entities;
+using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Abp.TestBase;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
@@ -12,8 +14,6 @@ using AbpCompanyName.AbpProjectName.EntityFrameworkCore;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Tenants;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace AbpCompanyName.AbpProjectName.Tests
 {
@@ -28,7 +28,7 @@ namespace AbpCompanyName.AbpProjectName.Tests
                 context.SuppressAutoSetTenantId = true;
             }
 
-            //Seed initial data for host
+            // Seed initial data for host
             AbpSession.TenantId = null;
             UsingDbContext(context =>
             {
@@ -37,7 +37,7 @@ namespace AbpCompanyName.AbpProjectName.Tests
                 new DefaultTenantBuilder(context).Create();
             });
 
-            //Seed initial data for default tenant
+            // Seed initial data for default tenant
             AbpSession.TenantId = 1;
             UsingDbContext(context =>
             {
@@ -144,7 +144,7 @@ namespace AbpCompanyName.AbpProjectName.Tests
 
         protected void LoginAsDefaultTenantAdmin()
         {
-            LoginAsTenant(Tenant.DefaultTenantName, AbpUserBase.AdminUserName);
+            LoginAsTenant(AbpTenantBase.DefaultTenantName, AbpUserBase.AdminUserName);
         }
 
         protected void LoginAsHost(string userName)

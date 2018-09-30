@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Abp.Authorization.Users;
 using Abp.Domain.Services;
 using Abp.IdentityFramework;
@@ -9,8 +11,6 @@ using Abp.Runtime.Session;
 using Abp.UI;
 using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Users
 {
@@ -51,20 +51,20 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Users
                 EmailAddress = emailAddress,
                 IsActive = true,
                 UserName = userName,
-                IsEmailConfirmed = true,
+                IsEmailConfirmed = isEmailConfirmed,
                 Roles = new List<UserRole>()
             };
 
             user.SetNormalizedNames();
-
-            user.Password = _passwordHasher.HashPassword(user, plainPassword);
-
+           
             foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
             {
                 user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
             }
 
-            CheckErrors(await _userManager.CreateAsync(user));
+            await _userManager.InitializeOptionsAsync(tenant.Id);
+
+            CheckErrors(await _userManager.CreateAsync(user, plainPassword));
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return user;

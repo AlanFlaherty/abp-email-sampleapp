@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Abp.Application.Services;
-using Abp.Application.Services.Dto;
-using Abp.Domain.Repositories;
 using System.Linq;
-using Abp.Authorization;
-using AbpCompanyName.AbpProjectName.Authorization.Roles;
-using AbpCompanyName.AbpProjectName.Roles.Dto;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Abp.Application.Services;
+using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
 using Abp.IdentityFramework;
-using AbpCompanyName.AbpProjectName.Authorization.Users;
+using Abp.Linq.Extensions;
+using Abp.Extensions;
 using AbpCompanyName.AbpProjectName.Authorization;
-using Abp.UI;
+using AbpCompanyName.AbpProjectName.Authorization.Roles;
+using AbpCompanyName.AbpProjectName.Authorization.Users;
+using AbpCompanyName.AbpProjectName.Roles.Dto;
 
 namespace AbpCompanyName.AbpProjectName.Roles
 {
@@ -48,6 +49,19 @@ namespace AbpCompanyName.AbpProjectName.Roles
             return MapToEntityDto(role);
         }
 
+        public async Task<ListResultDto<RoleListDto>> GetRolesAsync(GetRolesInput input)
+        {
+            var roles = await _roleManager
+                .Roles
+                .WhereIf(
+                    !input.Permission.IsNullOrWhiteSpace(),
+                    r => r.Permissions.Any(rp => rp.Name == input.Permission && rp.IsGranted)
+                )
+                .ToListAsync();
+
+            return new ListResultDto<RoleListDto>(ObjectMapper.Map<List<RoleListDto>>(roles));
+        }
+
         public override async Task<RoleDto> Update(RoleDto input)
         {
             CheckUpdatePermission();
@@ -73,11 +87,6 @@ namespace AbpCompanyName.AbpProjectName.Roles
             CheckDeletePermission();
 
             var role = await _roleManager.FindByIdAsync(input.Id.ToString());
-            if (role.IsStatic)
-            {
-                throw new UserFriendlyException("CannotDeleteAStaticRole");
-            }
-
             var users = await _userManager.GetUsersInRoleAsync(role.NormalizedName);
 
             foreach (var user in users)
@@ -115,6 +124,21 @@ namespace AbpCompanyName.AbpProjectName.Roles
         protected virtual void CheckErrors(IdentityResult identityResult)
         {
             identityResult.CheckErrors(LocalizationManager);
+        }
+
+        public async Task<GetRoleForEditOutput> GetRoleForEdit(EntityDto input)
+        {
+            var permissions = PermissionManager.GetAllPermissions();
+            var role = await _roleManager.GetRoleByIdAsync(input.Id);
+            var grantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).ToArray();
+            var roleEditDto = ObjectMapper.Map<RoleEditDto>(role);
+
+            return new GetRoleForEditOutput
+            {
+                Role = roleEditDto,
+                Permissions = ObjectMapper.Map<List<FlatPermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList(),
+                GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
+            };
         }
     }
 }

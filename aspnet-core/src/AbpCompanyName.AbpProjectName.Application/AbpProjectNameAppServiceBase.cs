@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Abp.Application.Services;
-using AbpCompanyName.AbpProjectName.MultiTenancy;
-using Abp.Runtime.Session;
-using Abp.IdentityFramework;
-using AbpCompanyName.AbpProjectName.Authorization.Users;
 using Microsoft.AspNetCore.Identity;
+using Abp.Application.Services;
+using Abp.IdentityFramework;
+using Abp.Runtime.Session;
+using AbpCompanyName.AbpProjectName.Authorization.Users;
+using AbpCompanyName.AbpProjectName.MultiTenancy;
 
 namespace AbpCompanyName.AbpProjectName
 {

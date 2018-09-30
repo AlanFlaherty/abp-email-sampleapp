@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Abp.Application.Editions;
 using Abp.Application.Features;
 using AbpCompanyName.AbpProjectName.Editions;
@@ -21,7 +22,7 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
 
         private void CreateEditions()
         {
-            var defaultEdition = _context.Editions.FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
+            var defaultEdition = _context.Editions.IgnoreQueryFilters().FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
             if (defaultEdition == null)
             {
                 defaultEdition = new Edition { Name = EditionManager.DefaultEditionName, DisplayName = EditionManager.DefaultEditionName };
@@ -34,18 +35,18 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
 
         private void CreateFeatureIfNotExists(int editionId, string featureName, bool isEnabled)
         {
-            var defaultEditionChatFeature = _context.EditionFeatureSettings
-                                                        .FirstOrDefault(ef => ef.EditionId == editionId && ef.Name == featureName);
-
-            if (defaultEditionChatFeature == null)
+            if (_context.EditionFeatureSettings.IgnoreQueryFilters().Any(ef => ef.EditionId == editionId && ef.Name == featureName))
             {
-                _context.EditionFeatureSettings.Add(new EditionFeatureSetting
-                {
-                    Name = featureName,
-                    Value = isEnabled.ToString(),
-                    EditionId = editionId
-                });
+                return;
             }
+
+            _context.EditionFeatureSettings.Add(new EditionFeatureSetting
+            {
+                Name = featureName,
+                Value = isEnabled.ToString(),
+                EditionId = editionId
+            });
+            _context.SaveChanges();
         }
     }
 }

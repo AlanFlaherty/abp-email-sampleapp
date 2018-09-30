@@ -1,8 +1,11 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Abp;
+using Abp.Extensions;
 using Abp.Notifications;
 using Abp.Timing;
 using AbpCompanyName.AbpProjectName.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 using Abp.Extensions;
 using Microsoft.Net.Http.Headers;
@@ -40,11 +43,11 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Controllers
             var hostAdmin = new UserIdentifier(null, 1);
 
             await _notificationPublisher.PublishAsync(
-                    "App.SimpleMessage",
-                    new MessageNotificationData(message),
-                    severity: NotificationSeverity.Info,
-                    userIds: new[] { defaultTenantAdmin, hostAdmin }
-                 );
+                "App.SimpleMessage",
+                new MessageNotificationData(message),
+                severity: NotificationSeverity.Info,
+                userIds: new[] { defaultTenantAdmin, hostAdmin }
+            );
 
             return Content("Sent notification: " + message);
         }

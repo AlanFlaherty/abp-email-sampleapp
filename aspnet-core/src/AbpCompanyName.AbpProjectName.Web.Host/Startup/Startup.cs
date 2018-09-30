@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Linq;
-using Abp.AspNetCore;
-using Abp.Castle.Logging.Log4Net;
-using AbpCompanyName.AbpProjectName.Configuration;
-using AbpCompanyName.AbpProjectName.Identity;
-using Castle.Facilities.Logging;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Castle.Facilities.Logging;
 using Swashbuckle.AspNetCore.Swagger;
+using Abp.AspNetCore;
+using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
+using AbpCompanyName.AbpProjectName.Authentication.JwtBearer;
+using AbpCompanyName.AbpProjectName.Configuration;
+using AbpCompanyName.AbpProjectName.Identity;
 
 using FileContextCore.Extensions;
 
@@ -24,12 +26,13 @@ using AbpCompanyName.AbpProjectName.Owin;
 using Abp.Owin;
 #endif
 
+using Abp.AspNetCore.SignalR.Hubs;
 
 namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
 {
     public class Startup
     {
-        private const string DefaultCorsPolicyName = "localhost";
+        private const string _defaultCorsPolicyName = "localhost";
 
         private readonly IConfigurationRoot _appConfiguration;
 
@@ -40,58 +43,78 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //MVC
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName));
-            });
+            // MVC
+            services.AddMvc(
+                options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))
+            );
 
             IdentityRegistrar.Register(services);
+            AuthConfigurer.Configure(services, _appConfiguration);
 
-            //Configure CORS for angular2 UI
-            services.AddCors(options =>
-            {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
-                {
-                    //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
-                    builder
-                        .WithOrigins(_appConfiguration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).Select(o => o.RemovePostFix("/")).ToArray())
+            services.AddSignalR();
+
+            // Configure CORS for angular2 UI
+            services.AddCors(
+                options => options.AddPolicy(
+                    _defaultCorsPolicyName,
+                    builder => builder
+                        .WithOrigins(
+                            // App:CorsOrigins in appsettings.json can contain more than one address separated by comma.
+                            _appConfiguration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                )
+            );
 
-            //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
+            // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Info { Title = "AbpProjectName API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
+
+                // Define the BearerAuth scheme that's in use
+                options.AddSecurityDefinition("bearerAuth", new ApiKeyScheme()
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                // Assign scope requirements to operations based on AuthorizeAttribute
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 
-            //Configure Abp and Dependency Injection
-            return services.AddAbp<AbpProjectNameWebHostModule>(options =>
-            {
-                //Configure Log4Net logging
-                options.IocManager.IocContainer.AddFacility<LoggingFacility>(
+            // Configure Abp and Dependency Injection
+            return services.AddAbp<AbpProjectNameWebHostModule>(
+                // Configure Log4Net logging
+                options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
-                );
-            });
+                )
+            );
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseAbp(); //Initializes ABP framework.
+            app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
-            app.UseCors(DefaultCorsPolicyName); //Enable CORS!
-
-            AuthConfigurer.Configure(app, _appConfiguration);
+            app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
             app.UseStaticFiles();
 
-#if FEATURE_SIGNALR
-            //Integrate to OWIN
-            app.UseAppBuilder(ConfigureOwinServices);
-#endif
+            app.UseAuthentication();
+
+            app.UseAbpRequestLocalization();
+
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<AbpCommonHub>("/signalr");
+            });
 
             app.UseMvc(routes =>
             {
@@ -113,27 +136,10 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "AbpProjectName API V1");
-            }); //URL: /swagger
+                options.SwaggerEndpoint(_appConfiguration["App:ServerRootAddress"] + "/swagger/v1/swagger.json", "AbpProjectName API V1");
+                options.IndexStream = () => Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream("AbpCompanyName.AbpProjectName.Web.Host.wwwroot.swagger.ui.index.html");
+            }); // URL: /swagger
         }
-
-#if FEATURE_SIGNALR
-        private static void ConfigureOwinServices(IAppBuilder app)
-        {
-            app.Properties["host.AppName"] = "AbpZeroTemplate";
-
-            app.UseAbp();
-            
-            app.Map("/signalr", map =>
-            {
-                map.UseCors(CorsOptions.AllowAll);
-                var hubConfiguration = new HubConfiguration
-                {
-                    EnableJSONP = true
-                };
-                map.RunSignalR(hubConfiguration);
-            });
-        }
-#endif
     }
 }

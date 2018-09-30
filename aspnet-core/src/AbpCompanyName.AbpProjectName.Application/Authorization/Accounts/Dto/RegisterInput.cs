@@ -2,20 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 using Abp.Auditing;
 using Abp.Authorization.Users;
-using AbpCompanyName.AbpProjectName.Authorization.Users;
-using AbpCompanyName.AbpProjectName.Validation;
 using Abp.Extensions;
+using AbpCompanyName.AbpProjectName.Validation;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Accounts.Dto
 {
     public class RegisterInput : IValidatableObject
     {
         [Required]
-        [StringLength(User.MaxNameLength)]
+        [StringLength(AbpUserBase.MaxNameLength)]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(User.MaxSurnameLength)]
+        [StringLength(AbpUserBase.MaxSurnameLength)]
         public string Surname { get; set; }
 
         [Required]
@@ -28,7 +27,7 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Accounts.Dto
         public string EmailAddress { get; set; }
 
         [Required]
-        [StringLength(User.MaxPlainPasswordLength)]
+        [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]
         public string Password { get; set; }
 
@@ -41,7 +40,7 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Accounts.Dto
             {
                 if (!UserName.Equals(EmailAddress) && ValidationHelper.IsEmail(UserName))
                 {
-                    yield return new ValidationResult("Username cannot be an email address unless it's same with your email address !");
+                    yield return new ValidationResult("Username cannot be an email address unless it's the same as your email address!");
                 }
             }
         }
