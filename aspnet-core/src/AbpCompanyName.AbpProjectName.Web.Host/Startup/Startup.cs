@@ -17,6 +17,8 @@ using AbpCompanyName.AbpProjectName.Configuration;
 using AbpCompanyName.AbpProjectName.Identity;
 
 using FileContextCore.Extensions;
+using AbpCompanyName.AbpProjectName.Web.Host.Hubs;
+using AbpCompanyName.AbpProjectName.Web.Host.BackgroundTasks;
 
 #if FEATURE_SIGNALR
 using Owin;
@@ -48,10 +50,13 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
                 options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))
             );
 
+            // Add ImapService background task 
+            services.AddSingleton<IMAPHostedService>();
+            // Then add as an IHostedService to add it to the background tasks 
+            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService>(x => x.GetService<IMAPHostedService>());
+
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
-
-            services.AddSignalR();
 
             // Configure CORS for angular2 UI
             services.AddCors(
@@ -89,6 +94,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 
+            services.AddSignalR();
+
             // Configure Abp and Dependency Injection
             return services.AddAbp<AbpProjectNameWebHostModule>(
                 // Configure Log4Net logging
@@ -110,10 +117,10 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
 
             app.UseAbpRequestLocalization();
 
-
             app.UseSignalR(routes =>
             {
                 routes.MapHub<AbpCommonHub>("/signalr");
+                routes.MapHub<MailHub>("/mail");
             });
 
             app.UseMvc(routes =>

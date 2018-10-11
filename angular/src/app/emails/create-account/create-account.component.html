@@ -1,0 +1,178 @@
+<div class="row clearfix" [@routerTransition]>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card">
+      <div class="header">
+        <h2>
+          Add Email Account
+        </h2>
+      </div>
+      <div class="body">
+        <h2 class="card-inside-title">Account Details</h2>
+        <form #createAccountForm="ngForm" id="frm_create_account" novalidate (ngSubmit)="save()">
+
+        <!-- account name, account email address -->
+        <div class="row clearfix" style="margin-top:10px;">
+          <div class="col-sm-12">
+            <div class="form-group form-float">
+              <div class="form-line">
+                <input id="emailaddress" type="email" name="EmailAddress" [(ngModel)]="viewModel.emailAddress" required maxlength="32" minlength="2"
+                  class="validate form-control">
+                <label for="emailaddress" class="form-label">{{l("EmailAddress")}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row clearfix" style="margin-top:10px;">
+          <div class="col-sm-12">
+            <div class="form-group form-float">
+              <div class="form-line">
+                <input id="username" type="text" name="UserName" [(ngModel)]="viewModel.userName" required maxlength="32" minlength="2"
+                  class="validate form-control">
+                <label for="username" class="form-label">{{l("UserName")}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class="col-sm-8">
+            <div class="form-group form-float">
+              <div class="form-line">
+                <input id="password" type="password" name="Password" class="form-control" [(ngModel)]="viewModel.password" required maxlength="32"
+                  class="validate form-control">
+                <label for="password" class="form-label">{{l("Password")}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-float">
+              <div class="">
+                <input id="ispasswordstored" type="checkbox" name="IsActive" [(ngModel)]="viewModel.storePassword" checked class="form-control" />
+                <label for="ispasswordstored" class="form-label">{{l("IsPasswordStored")}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class="col-sm-8 col-sm-offset-4">
+              If you choose not to save your password on the server you will be asked for it once after you log into the application again.
+          </div>
+        </div>
+
+        <h2 class="card-inside-title">IMAP Details</h2>
+        <!-- tab 2 -->
+        <div class="row clearfix" style="margin-top:10px;">
+          <div class="col-sm-12">
+            <div class="form-group form-float">
+              <div class="form-line">
+                <input id="imapserver" type="text" name="IMapServer" [(ngModel)]="viewModel.imapServer" required maxlength="32" minlength="2"
+                  class="validate form-control">
+                <label for="imapserver" class="form-label">{{l("IMapServer")}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class="col-sm-12">
+            <div class="form-group form-float">
+              <div class="form-line">
+                <input id="imapport" type="text" name="IMapPort" [(ngModel)]="viewModel.imapPort" required maxlength="32" minlength="2"
+                  class="validate form-control">
+                <label for="imapport" class="form-label">{{l("IMapPort")}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- This should be a dropdown based on the enum [none, Auto, SslOnConnect, Tls, StartTls] -->
+        <div class="row clearfix">
+          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+              <label for="imapsecuritytype" style="color:#aaa; font-weight: normal" class="form-label pull-left">{{l("IMapSecurityType")}}</label>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+              <div class="form-group">
+                  <div class="form-line">
+                      <select class="form-control show-tick" id="imapsecuritytype"  name="IMapSecurityType" [(ngModel)]="viewModel.imapSecurityType" required>
+                          <option value="None">None</option>
+                          <option value="Auto">Auto</option>
+                          <option value="SslOnConnect">SslOnConnect</option>
+                          <option value="StartTls">StartTls</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <h2 class="card-inside-title">SMTP Details</h2>
+        <!-- tab 3 -->
+        <div class="row clearfix" style="margin-top:10px;">
+          <div class="col-sm-12">
+            <div class="form-group form-float">
+              <div class="form-line">
+                <input id="smtpserver" type="text" name="SMTPServer" [(ngModel)]="viewModel.smtpServer" required maxlength="32" minlength="2"
+                  class="validate form-control">
+                <label for="smtpserver" class="form-label">{{l("SMTPServer")}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class="col-sm-12">
+            <div class="form-group form-float">
+              <div class="form-line">
+                <input id="smtpport" type="text" name="SMTPPort" [(ngModel)]="viewModel.smtpPort" required maxlength="32" minlength="2"
+                  class="validate form-control">
+                <label for="smtpport" class="form-label">{{l("SMTPPort")}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- This should be a dropdown based on the enum [none, Auto, SslOnConnect, Tls, StartTls] -->
+        <div class="row clearfix">
+          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+              <label for="smtpsecuritytype" style="color:#aaa; font-weight: normal" class="form-label pull-left">{{l("SMTPSecurityType")}}</label>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+              <div class="form-group">
+                  <div class="form-line">
+                      <select class="form-control show-tick" id="smtpsecuritytype"  name="SMTPSecurityType" [(ngModel)]="viewModel.smtpSecurityType" required>
+                          <option value="None">None</option>
+                          <option value="Auto">Auto</option>
+                          <option value="SslOnConnect">SslOnConnect</option>
+                          <option value="StartTls">StartTls</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div>{{inspect(createAccountForm.form)}}</div>
+
+        <div class="row clearfix">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <button [disabled]="true" type="button" class="pull-right btn btn-primary m-t-15 waves-effect" (click)="saveAccountDetails()">
+                  <i class="material-icons">verified_user</i> {{l("Save")}}
+                </button>
+
+                <button [disabled]="false" type="button" class="pull-right btn btn-primary m-t-15 m-r-15 waves-effect" (click)="validateAccountDetails()">
+                  <i class="material-icons">verified_user</i> {{l("Validate Account Settings")}}
+                </button>
+
+
+              </div>
+            </div>
+        </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+  
+<account-validation-dialog #accountValidationDialog (modalSave)="refresh()"></account-validation-dialog>

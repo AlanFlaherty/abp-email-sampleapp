@@ -8,6 +8,11 @@ import { UsersComponent } from './users/users.component';
 import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 
+import { EmailDashboardComponent } from '@app/emails/email-dashboard/email-dashboard.component';
+import { CreateAccountComponent} from '@app/emails/create-account/create-account.component';
+import { CreateEmailComponent } from '@app/emails/create-email/create-email.component';
+
+
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -16,6 +21,10 @@ import { RolesComponent } from 'app/roles/roles.component';
                 component: AppComponent,
                 children: [
                     { path: 'home', component: HomeComponent,  canActivate: [AppRouteGuard] },
+                    { path: 'emails', component: EmailDashboardComponent, data: { permission: 'Pages.Emails' }, canActivate: [AppRouteGuard] },
+                    { path: 'emails/create-account', component: CreateAccountComponent, canActivate: [AppRouteGuard] },
+                    { path: 'emails/create-email', component: CreateEmailComponent, data: { permission: 'Pages.Emails' }, canActivate: [AppRouteGuard] },
+                    
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },

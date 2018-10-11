@@ -33,6 +33,13 @@ import { SideBarNavComponent } from '@app/layout/sidebar-nav.component';
 import { SideBarFooterComponent } from '@app/layout/sidebar-footer.component';
 import { RightSideBarComponent } from '@app/layout/right-sidebar.component';
 
+import { EmailDashboardComponent } from '@app/emails/email-dashboard/email-dashboard.component';
+import { CreateAccountComponent } from '@app/emails/create-account/create-account.component';
+import { AccountValidationDialogComponent } from '@app/emails/account-validation-dialog/account-validation-dialog.component';
+import { CreateEmailComponent } from '@app/emails/create-email/create-email.component';
+
+import { EditorModule } from '@tinymce/tinymce-angular';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -52,8 +59,13 @@ import { RightSideBarComponent } from '@app/layout/right-sidebar.component';
         SideBarUserAreaComponent,
         SideBarNavComponent,
         SideBarFooterComponent,
-        RightSideBarComponent
-    
+        RightSideBarComponent,
+        
+        EmailDashboardComponent,
+        CreateAccountComponent,
+        AccountValidationDialogComponent,
+		CreateEmailComponent
+        
     ],
     imports: [
         CommonModule,
@@ -65,7 +77,8 @@ import { RightSideBarComponent } from '@app/layout/right-sidebar.component';
         AppRoutingModule,
         ServiceProxyModule,
         SharedModule,
-        NgxPaginationModule
+        NgxPaginationModule,
+        EditorModule
     ],
     providers: [
 

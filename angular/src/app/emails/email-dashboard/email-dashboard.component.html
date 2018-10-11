@@ -1,0 +1,3 @@
+<a routerLink="/app/emails/create-account"><button class="btn btn-success pull-left" [disabled]="accountsAvailable">Add Account</button></a>
+
+<a routerLink="/app/emails/create-email"><button class="btn btn-success pull-right" [disabled]="!accountsAvailable">Send Email</button></a>

@@ -1,0 +1,43 @@
+<!-- TODO: rename file to modal rather than dialog... -->
+<div bsModal #accountValidationModal="bs-modal" class="modal fade" (onShown)="onShown()" tabindex="-1" role="dialog" aria-labelledby="mailSettingsModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+
+        <div #modalContent class="modal-content">
+
+            <form *ngIf="active" #accountValidationForm="ngForm" id="frm_create_user" novalidate (ngSubmit)="save()">
+                
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span>{{l("Validate Account Details")}}</span>
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <pre #messageContainer style="height: 200px; max-height: 200px; overflow-y:auto; font-family: 'Courier New', Courier, monospace">{{messages}}
+</pre>
+                        </div>
+                        <div class="form-line">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" [style.width]="percent" [class.progress-bar-success]="status=='Success'" [class.progress-bar-danger]="status=='Failure'">
+                                    <span class="sr-only">{{percent}}% Complete ({{status}})</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                </div>
+
+                <div class="modal-footer">
+                    <button [disabled]="false" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button [disabled]="false" type="submit" class="btn btn-primary blue">{{l("Save")}}</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
